@@ -1,4 +1,4 @@
-FROM mongo:4.1.3
+FROM daocloud.io/quantaxis/qamongo_single
 
 
 MAINTAINER yutiansut  
