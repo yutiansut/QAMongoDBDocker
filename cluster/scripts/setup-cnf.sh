@@ -18,19 +18,18 @@ echo setup-cnf.sh time now: `date +"%T" `
 mongo --host ${mongodb1}:${port} <<EOF
    var cfg = {
         "_id": "${RS}",
-        "configsvr": true,
-        "protocolVersion": 1,
+        configsvr: true,
         "members": [
             {
-                "_id": 100,
+                "_id": 0,
                 "host": "${mongodb1}:${port}"
             },
             {
-                "_id": 101,
+                "_id": 1,
                 "host": "${mongodb2}:${port}"
             },
             {
-                "_id": 102,
+                "_id": 2,
                 "host": "${mongodb3}:${port}"
             }
         ]
