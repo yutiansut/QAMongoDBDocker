@@ -8,7 +8,7 @@ services:
         volumes:
             - ./configs:/etc/mongo
             - ./data/mongo-1-2:/data/db
-        command: mongod --replSet rs1 --shardsvr --port 27017  --oplogSize 16 --noprealloc --smallfiles --config /etc/mongo/shard-server.conf
+        command: mongod --replSet rs1 --shardsvr --port 27017  --oplogSize 16 --noprealloc  --config /etc/mongo/shard-server.conf
         restart: always
 
     mongo-1-3:
@@ -19,7 +19,7 @@ services:
         volumes:
             - ./configs:/etc/mongo
             - ./data/mongo-1-3:/data/db
-        command: mongod --replSet rs1 --shardsvr --port 27017  --oplogSize 16 --noprealloc --smallfiles --config /etc/mongo/shard-server.conf
+        command: mongod --replSet rs1 --shardsvr --port 27017  --oplogSize 16 --noprealloc  --config /etc/mongo/shard-server.conf
         restart: always 
 
     mongo-1-1:
@@ -30,7 +30,7 @@ services:
         volumes:
             - ./configs:/etc/mongo
             - ./data/mongo-1-1:/data/db
-        command: mongod --replSet rs1 --shardsvr --port 27017  --oplogSize 16 --noprealloc --smallfiles --config /etc/mongo/shard-server.conf
+        command: mongod --replSet rs1 --shardsvr --port 27017  --oplogSize 16 --noprealloc  --config /etc/mongo/shard-server.conf
         links:
             - mongo-1-2:mongo-1-2
             - mongo-1-3:mongo-1-3
