@@ -2,7 +2,7 @@ version: '3'
 services:
     mongo-2-2:
         container_name: "mongo-2-2"
-        image: mongo:4.0.1
+        image: daocloud.io/quantaxis/qamongo_single
         ports:
             - "30022:27017"
         volumes:
@@ -13,7 +13,7 @@ services:
 
     mongo-2-3:
         container_name: "mongo-2-3"
-        image: mongo:4.0.1
+        image: daocloud.io/quantaxis/qamongo_single
         ports:
             - "30023:27017"
         volumes:
@@ -24,7 +24,7 @@ services:
 
     mongo-2-1:
         container_name: "mongo-2-1"
-        image: mongo:4.0.1
+        image: daocloud.io/quantaxis/qamongo_single
         ports:
             - "30021:27017"
         volumes:
@@ -38,7 +38,7 @@ services:
 
     mongo-rs2-setup:
         container_name: "mongo-rs2-setup"
-        image: mongo:4.0.1
+        image: daocloud.io/quantaxis/qamongo_single
         depends_on:
             - "mongo-2-1"
             - "mongo-2-2"

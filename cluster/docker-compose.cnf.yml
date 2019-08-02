@@ -2,7 +2,7 @@ version: '3'
 services:
     mongo-cnf-2:
         container_name: "mongo-cnf-2"
-        image: mongo:4.0.1
+        image: daocloud.io/quantaxis/qamongo_single
         ports:
             - "30102:27017"
         volumes:
@@ -13,7 +13,7 @@ services:
 
     mongo-cnf-3:
         container_name: "mongo-cnf-3"
-        image: mongo:4.0.1
+        image: daocloud.io/quantaxis/qamongo_single
         ports:
             - "30103:27017"
         volumes:
@@ -24,7 +24,7 @@ services:
 
     mongo-cnf-1:
         container_name: "mongo-cnf-1"
-        image: mongo:4.0.1
+        image: daocloud.io/quantaxis/qamongo_single
         ports:
             - "30101:27017"
         volumes:
@@ -41,7 +41,7 @@ services:
 
     mongo-cnf-setup:
         container_name: "mongo-cnf-setup"
-        image: mongo:4.0.1
+        image: daocloud.io/quantaxis/qamongo_single
         depends_on:
             - "mongo-cnf-1"
             - "mongo-cnf-2"
