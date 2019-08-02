@@ -1,5 +1,4 @@
-FROM daocloud.io/quantaxis/qamongo_single
-
+FROM mongo:4.1.3
 
 MAINTAINER yutiansut  
 VOLUME ["/data/db"]
