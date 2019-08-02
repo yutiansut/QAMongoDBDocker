@@ -19,7 +19,9 @@ services:
             - mongo-2-1:mongo-2-1
             - mongo-2-2:mongo-2-2
             - mongo-2-3:mongo-2-3
-        command: mongos --configdb cnf-serv/mongo-cnf-1:27017,mongo-cnf-2:27017,mongo-cnf-3:27017 --port 27017 --bind_ip 0.0.0.0
+        volumes:
+              - ./configs:/etc/mongo              
+        command: mongos --configdb cnf-serv/mongo-cnf-1:27017,mongo-cnf-2:27017,mongo-cnf-3:27017 --port 27017 --bind_ip 0.0.0.0 --config /etc/mongo/route-server.conf
         restart: always
 
     mongo-shard-setup:
@@ -45,5 +47,9 @@ services:
             - PORT1=27017
             - PORT2=27017
             - PORT3=27017
-        entrypoint: [ "/scripts/init-shard.sh" ]
+            - MONGO_INITDB_ROOT_USERNAME=root
+            - MONGO_INITDB_ROOT_PASSWORD=root
+            - MONGO_INITDB=admin
+
+        entrypoint: ["sh","-x","/scripts/init-shard.sh" ]
         restart: on-failure:20

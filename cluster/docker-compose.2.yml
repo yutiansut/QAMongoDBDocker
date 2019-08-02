@@ -5,7 +5,10 @@ services:
         image: daocloud.io/quantaxis/qamongo_single
         ports:
             - "30022:27017"
-        command: mongod --replSet rs2 --shardsvr --port 27017  --oplogSize 16 --noprealloc --smallfiles
+        volumes:
+            - ./configs:/etc/mongo
+            - ./data/mongo-2-2:/data/db            
+        command: mongod --replSet rs2 --shardsvr --port 27017  --oplogSize 16 --noprealloc  --config /etc/mongo/shard-server.conf
         restart: always
 
     mongo-2-3:
@@ -13,7 +16,10 @@ services:
         image: daocloud.io/quantaxis/qamongo_single
         ports:
             - "30023:27017"
-        command: mongod --replSet rs2 --shardsvr --port 27017  --oplogSize 16 --noprealloc --smallfiles
+        volumes:
+            - ./configs:/etc/mongo
+            - ./data/mongo-2-3:/data/db            
+        command: mongod --replSet rs2 --shardsvr --port 27017  --oplogSize 16 --noprealloc  --config /etc/mongo/shard-server.conf
         restart: always 
 
     mongo-2-1:
@@ -21,7 +27,10 @@ services:
         image: daocloud.io/quantaxis/qamongo_single
         ports:
             - "30021:27017"
-        command: mongod --replSet rs2 --shardsvr --port 27017  --oplogSize 16 --noprealloc --smallfiles
+        volumes:
+            - ./configs:/etc/mongo
+            - ./data/mongo-2-1:/data/db              
+        command: mongod --replSet rs2 --shardsvr --port 27017  --oplogSize 16 --noprealloc  --config /etc/mongo/shard-server.conf
         links:
             - mongo-2-2:mongo-2-2
             - mongo-2-3:mongo-2-3
@@ -45,6 +54,9 @@ services:
             - MONGO2=mongo-2-2
             - MONGO3=mongo-2-3
             - RS=rs2
-        entrypoint: [ "/scripts/setup.sh" ]
+            - MONGO_INITDB_ROOT_USERNAME=root
+            - MONGO_INITDB_ROOT_PASSWORD=root
+            - MONGO_INITDB=admin
+        entrypoint: ["sh","-x", "/scripts/setup.sh" ]
 
         

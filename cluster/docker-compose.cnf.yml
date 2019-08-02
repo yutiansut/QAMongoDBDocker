@@ -5,7 +5,10 @@ services:
         image: daocloud.io/quantaxis/qamongo_single
         ports:
             - "30102:27017"
-        command: mongod --replSet cnf-serv --configsvr --port 27017 --oplogSize 16 --noprealloc --smallfiles
+        volumes:
+            - ./configs:/etc/mongo
+            - ./data/mongo-cnf-2:/data/configdb
+        command: mongod --replSet cnf-serv --configsvr --port 27017 --oplogSize 16 --noprealloc  --config /etc/mongo/cnf-server.conf
         restart: always
 
     mongo-cnf-3:
@@ -13,7 +16,10 @@ services:
         image: daocloud.io/quantaxis/qamongo_single
         ports:
             - "30103:27017"
-        command: mongod --replSet cnf-serv --configsvr --port 27017 --oplogSize 16 --noprealloc --smallfiles
+        volumes:
+            - ./configs:/etc/mongo
+            - ./data/mongo-cnf-3:/data/configdb            
+        command: mongod --replSet cnf-serv --configsvr --port 27017 --oplogSize 16 --noprealloc  --config /etc/mongo/cnf-server.conf
         restart: always 
 
     mongo-cnf-1:
@@ -21,11 +27,17 @@ services:
         image: daocloud.io/quantaxis/qamongo_single
         ports:
             - "30101:27017"
-        command: mongod --replSet cnf-serv --configsvr --port 27017 --oplogSize 16 --noprealloc --smallfiles
+        volumes:
+            - ./configs:/etc/mongo
+            - ./data/mongo-cnf-1:/data/configdb            
+        command: mongod --replSet cnf-serv --configsvr --port 27017 --oplogSize 16 --noprealloc  --config /etc/mongo/cnf-server.conf
         links:
             - mongo-cnf-2:mongo-cnf-2
             - mongo-cnf-3:mongo-cnf-3
         restart: always
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: root
+            MONGO_INITDB_ROOT_PASSWORD: root
 
     mongo-cnf-setup:
         container_name: "mongo-cnf-setup"
@@ -46,4 +58,8 @@ services:
             - MONGO3=mongo-cnf-3
             - RS=cnf-serv
             - PORT=27017
-        entrypoint: [ "/scripts/setup-cnf.sh" ]
+            - MONGO_INITDB_ROOT_USERNAME=root
+            - MONGO_INITDB_ROOT_PASSWORD=root
+            - MONGO_INITDB=admin
+
+        entrypoint: [ "sh","-x","/scripts/setup-cnf.sh" ]
