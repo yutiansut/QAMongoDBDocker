@@ -2,34 +2,46 @@ version: '3'
 services:
     mongo-cnf-2:
         container_name: "mongo-cnf-2"
-        image: daocloud.io/quantaxis/qamongo_single
+        image: mongo:4.0.1
         ports:
             - "30102:27017"
-        command: mongod --replSet cnf-serv --configsvr --port 27017 --oplogSize 16 --noprealloc --smallfiles
+        volumes:
+            - ./configs:/etc/mongo
+            - ./data/mongo-cnf-2:/data/configdb
+        command: mongod --replSet cnf-serv --configsvr --port 27017 --oplogSize 16 --noprealloc --smallfiles --config /etc/mongo/cnf-server.conf
         restart: always
 
     mongo-cnf-3:
         container_name: "mongo-cnf-3"
-        image: daocloud.io/quantaxis/qamongo_single
+        image: mongo:4.0.1
         ports:
             - "30103:27017"
-        command: mongod --replSet cnf-serv --configsvr --port 27017 --oplogSize 16 --noprealloc --smallfiles
+        volumes:
+            - ./configs:/etc/mongo
+            - ./data/mongo-cnf-3:/data/configdb            
+        command: mongod --replSet cnf-serv --configsvr --port 27017 --oplogSize 16 --noprealloc --smallfiles --config /etc/mongo/cnf-server.conf
         restart: always 
 
     mongo-cnf-1:
         container_name: "mongo-cnf-1"
-        image: daocloud.io/quantaxis/qamongo_single
+        image: mongo:4.0.1
         ports:
             - "30101:27017"
-        command: mongod --replSet cnf-serv --configsvr --port 27017 --oplogSize 16 --noprealloc --smallfiles
+        volumes:
+            - ./configs:/etc/mongo
+            - ./data/mongo-cnf-1:/data/configdb            
+        command: mongod --replSet cnf-serv --configsvr --port 27017 --oplogSize 16 --noprealloc --smallfiles --config /etc/mongo/cnf-server.conf
         links:
             - mongo-cnf-2:mongo-cnf-2
             - mongo-cnf-3:mongo-cnf-3
         restart: always
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: root
+            MONGO_INITDB_ROOT_PASSWORD: root
 
     mongo-cnf-setup:
         container_name: "mongo-cnf-setup"
-        image: daocloud.io/quantaxis/qamongo_single
+        image: mongo:4.0.1
         depends_on:
             - "mongo-cnf-1"
             - "mongo-cnf-2"
@@ -46,4 +58,8 @@ services:
             - MONGO3=mongo-cnf-3
             - RS=cnf-serv
             - PORT=27017
+            - MONGO_INITDB_ROOT_USERNAME=root
+            - MONGO_INITDB_ROOT_PASSWORD=root
+            - MONGO_INITDB=admin
+
         entrypoint: [ "sh","-x","/scripts/setup-cnf.sh" ]
