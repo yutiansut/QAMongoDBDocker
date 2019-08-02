@@ -1,36 +1,33 @@
-version: '3'
+version: '2'
 services:
     mongo-2-2:
         container_name: "mongo-2-2"
-        image: daocloud.io/quantaxis/qamongo_single
+        image: daocloud.io/quantaxis/qamongo_single3
+        volumes:
+            - ./data/mongo-2-2:/data/db
         ports:
             - "30022:27017"
-        volumes:
-            - ./configs:/etc/mongo
-            - ./data/mongo-2-2:/data/db            
-        command: mongod --replSet rs2 --shardsvr --port 27017  --oplogSize 16 --noprealloc  --config /etc/mongo/shard-server.conf
+        command: mongod --replSet rs2 --dbpath /data/db --shardsvr --port 27017 --nojournal --oplogSize 16 --noprealloc --smallfiles
         restart: always
 
     mongo-2-3:
         container_name: "mongo-2-3"
-        image: daocloud.io/quantaxis/qamongo_single
+        image: daocloud.io/quantaxis/qamongo_single3
+        volumes:
+            - ./data/mongo-2-3:/data/db
         ports:
             - "30023:27017"
-        volumes:
-            - ./configs:/etc/mongo
-            - ./data/mongo-2-3:/data/db            
-        command: mongod --replSet rs2 --shardsvr --port 27017  --oplogSize 16 --noprealloc  --config /etc/mongo/shard-server.conf
+        command: mongod --replSet rs2 --dbpath /data/db --shardsvr --port 27017 --nojournal --oplogSize 16 --noprealloc --smallfiles
         restart: always 
 
     mongo-2-1:
         container_name: "mongo-2-1"
-        image: daocloud.io/quantaxis/qamongo_single
+        image: daocloud.io/quantaxis/qamongo_single3
+        volumes:
+            - ./data/mongo-2-1:/data/db
         ports:
             - "30021:27017"
-        volumes:
-            - ./configs:/etc/mongo
-            - ./data/mongo-2-1:/data/db              
-        command: mongod --replSet rs2 --shardsvr --port 27017  --oplogSize 16 --noprealloc  --config /etc/mongo/shard-server.conf
+        command: mongod --replSet rs2 --dbpath /data/db --shardsvr --port 27017 --nojournal --oplogSize 16 --noprealloc --smallfiles
         links:
             - mongo-2-2:mongo-2-2
             - mongo-2-3:mongo-2-3
@@ -38,7 +35,7 @@ services:
 
     mongo-rs2-setup:
         container_name: "mongo-rs2-setup"
-        image: daocloud.io/quantaxis/qamongo_single
+        image: daocloud.io/quantaxis/qamongo_single3
         depends_on:
             - "mongo-2-1"
             - "mongo-2-2"
@@ -54,9 +51,6 @@ services:
             - MONGO2=mongo-2-2
             - MONGO3=mongo-2-3
             - RS=rs2
-            - MONGO_INITDB_ROOT_USERNAME=root
-            - MONGO_INITDB_ROOT_PASSWORD=root
-            - MONGO_INITDB=admin
-        entrypoint: ["sh","-x", "/scripts/setup.sh" ]
+        entrypoint: [ "/scripts/setup.sh" ]
 
         
