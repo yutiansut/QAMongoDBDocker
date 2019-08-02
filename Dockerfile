@@ -9,3 +9,4 @@ ENV MONGO_INITDB_DATABASE=quantaxis
 
 
 EXPOSE 27017
+CMD ["mongod"]
