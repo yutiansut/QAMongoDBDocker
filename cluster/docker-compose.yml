@@ -1,6 +1,6 @@
 version: '2'
 services:
-# sharding 副本集 rs1
+# sharding  rs1
     mongo-1-2:
         container_name: "mongo-1-2"
         image: daocloud.io/quantaxis/qamongo_single
@@ -8,7 +8,7 @@ services:
             - ./data/mongo-1-2:/data/db
         ports:
             - "30012:27017"
-        command: mongod --replSet rs1 --dbpath /data/db --shardsvr --port 27017 --nojournal --oplogSize 16 --noprealloc 
+        command: mongod --replSet rs1 --dbpath /data/db --shardsvr --bind_ip 0.0.0.0 --port 27017 --nojournal --oplogSize 16 --noprealloc 
         restart: always
 
     mongo-1-3:
@@ -18,7 +18,7 @@ services:
             - ./data/mongo-1-3:/data/db
         ports:
             - "30013:27017"
-        command: mongod --replSet rs1 --dbpath /data/db --shardsvr --port 27017 --nojournal --oplogSize 16 --noprealloc 
+        command: mongod --replSet rs1 --dbpath /data/db --shardsvr --bind_ip 0.0.0.0 --port 27017 --nojournal --oplogSize 16 --noprealloc 
         restart: always 
 
     mongo-1-1:
@@ -28,7 +28,7 @@ services:
             - ./data/mongo-1-1:/data/db
         ports:
             - "30011:27017"
-        command: mongod --replSet rs1 --dbpath /data/db --shardsvr --port 27017 --nojournal --oplogSize 16 --noprealloc 
+        command: mongod --replSet rs1 --dbpath /data/db --shardsvr --bind_ip 0.0.0.0 --port 27017 --nojournal --oplogSize 16 --noprealloc 
         links:
             - mongo-1-2:mongo-1-2
             - mongo-1-3:mongo-1-3
@@ -54,7 +54,7 @@ services:
             - RS=rs1
         entrypoint: ["sh", "-x", "/scripts/setup.sh" ]
 
-# sharding 副本集 rs2
+# sharding  rs2
     mongo-2-2:
         container_name: "mongo-2-2"
         image: daocloud.io/quantaxis/qamongo_single
@@ -62,7 +62,7 @@ services:
             - ./data/mongo-2-2:/data/db
         ports:
             - "30022:27017"
-        command: mongod --replSet rs2 --dbpath /data/db --shardsvr --port 27017 --nojournal --oplogSize 16 --noprealloc 
+        command: mongod --replSet rs2 --dbpath /data/db --shardsvr --bind_ip 0.0.0.0 --port 27017 --nojournal --oplogSize 16 --noprealloc 
         restart: always
 
     mongo-2-3:
@@ -72,7 +72,7 @@ services:
             - ./data/mongo-2-3:/data/db
         ports:
             - "30023:27017"
-        command: mongod --replSet rs2 --dbpath /data/db --shardsvr --port 27017 --nojournal --oplogSize 16 --noprealloc 
+        command: mongod --replSet rs2 --dbpath /data/db --shardsvr --bind_ip 0.0.0.0 --port 27017 --nojournal --oplogSize 16 --noprealloc 
         restart: always 
 
     mongo-2-1:
@@ -82,7 +82,7 @@ services:
             - ./data/mongo-2-1:/data/db
         ports:
             - "30021:27017"
-        command: mongod --replSet rs2 --dbpath /data/db --shardsvr --port 27017 --nojournal --oplogSize 16 --noprealloc 
+        command: mongod --replSet rs2 --dbpath /data/db --shardsvr --bind_ip 0.0.0.0 --port 27017 --nojournal --oplogSize 16 --noprealloc 
         links:
             - mongo-2-2:mongo-2-2
             - mongo-2-3:mongo-2-3
@@ -108,7 +108,7 @@ services:
             - RS=rs2
         entrypoint: ["sh", "-x", "/scripts/setup.sh" ]
         
-#config 副本集 cnf-serv
+#config  cnf-serv
     mongo-cnf-2:
         container_name: "mongo-cnf-2"
         image: daocloud.io/quantaxis/qamongo_single
@@ -116,7 +116,7 @@ services:
             - ./data/mongo-cnf-2:/data/db
         ports:
             - "30002:27017"
-        command: mongod --replSet cnf-serv --dbpath /data/db --configsvr --port 27017 --oplogSize 16 --noprealloc 
+        command: mongod --replSet cnf-serv --dbpath /data/db --configsvr --bind_ip 0.0.0.0 --port 27017 --oplogSize 16 --noprealloc 
         restart: always
 
     mongo-cnf-3:
@@ -126,7 +126,7 @@ services:
             - ./data/mongo-cnf-3:/data/db
         ports:
             - "30003:27017"
-        command: mongod --replSet cnf-serv --dbpath /data/db --configsvr --port 27017 --oplogSize 16 --noprealloc 
+        command: mongod --replSet cnf-serv --dbpath /data/db --configsvr --bind_ip 0.0.0.0 --port 27017 --oplogSize 16 --noprealloc 
         restart: always 
 
     mongo-cnf-1:
@@ -136,7 +136,7 @@ services:
             - ./data/mongo-cnf-1:/data/db
         ports:
             - "30001:27017"
-        command: mongod --replSet cnf-serv --dbpath /data/db --configsvr --port 27017 --oplogSize 16 --noprealloc 
+        command: mongod --replSet cnf-serv --dbpath /data/db --configsvr --bind_ip 0.0.0.0 --port 27017 --oplogSize 16 --noprealloc 
         links:
             - mongo-cnf-2:mongo-cnf-2
             - mongo-cnf-3:mongo-cnf-3
@@ -163,7 +163,7 @@ services:
             - PORT=27017
         entrypoint: ["sh", "-x", "/scripts/setup-cnf.sh" ]
 
-# 创建router
+# router
     mongo-router:
         container_name: "mongo-router"
         image: daocloud.io/quantaxis/qamongo_single
