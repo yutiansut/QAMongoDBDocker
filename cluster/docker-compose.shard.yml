@@ -2,7 +2,7 @@ version: '2'
 services:
     mongo-router:
         container_name: "mongo-router"
-        image: daocloud.io/quantaxis/qamongo_single3
+        image: mongo:4.1.3
         volumes:
             - ./data/mongo-router:/data/db
         ports:
@@ -26,14 +26,14 @@ services:
 
     mongo-shard-setup:
         container_name: "mongo-shard-setup"
-        image: daocloud.io/quantaxis/qamongo_single3
+        image: mongo:4.1.3
         depends_on:
             - "mongo-router"
         links:
             - mongo-router:mongo-router
         volumes:
             - ./scripts:/scripts
-        environment: 
+        environment:
             - MONGOS=mongo-router
             - MONGO11=mongo-1-1
             - MONGO12=mongo-1-2
