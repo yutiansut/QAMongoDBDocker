@@ -4,7 +4,7 @@
 quantaxis_mongodb_docker
 
 
-1. mongodb docker 
+1. mongodb docker
 
 单例模式, 适用于个人用户及测试环境
 
@@ -16,5 +16,5 @@ quantaxis_mongodb_docker
 
 ```
 cd cluster
-docker-compose -f docker-compose.1.yml -f docker-compose.2.yml  -f docker-compose.cnf.yml -f docker-compose.shard.yml up
+docker-compose up -d
 ```
