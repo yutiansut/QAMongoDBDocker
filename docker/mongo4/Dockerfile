@@ -1,4 +1,4 @@
-FROM mongo:4.1.3
+FROM mongo:4.2.4
 
 MAINTAINER yutiansut  
 VOLUME ["/data/db"]
